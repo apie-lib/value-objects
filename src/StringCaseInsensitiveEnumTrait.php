@@ -5,7 +5,7 @@ namespace Apie\ValueObjects;
 
 use ReflectionClass;
 
-trait StringEnumTrait
+trait StringCaseInsensitiveEnumTrait
 {
     use StringTrait;
 
@@ -16,12 +16,14 @@ trait StringEnumTrait
 
     final protected function validValue(string $value): bool
     {
+        $value = strtoupper($value);
         $values = self::getLookupTable();
         return isset($values[$value]);
     }
 
     final protected function sanitizeValue(string $value): string
     {
+        $value = strtoupper($value);
         $values = self::getLookupTable();
         assert(isset($values[$value]));
         return $values[$value];
@@ -33,10 +35,10 @@ trait StringEnumTrait
             $values = self::getValidValues();
             self::$lookupTable = [];
             foreach ($values as $value) {
-                self::$lookupTable[$value] = $value;
+                self::$lookupTable[strtoupper($value)] = $value;
             }
             foreach ($values as $key => $value) {
-                self::$lookupTable[$key] = $value;
+                self::$lookupTable[strtoupper($key)] = $value;
             }
         }
         return self::$lookupTable;
